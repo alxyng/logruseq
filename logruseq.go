@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"time"
 
 	"github.com/sirupsen/logrus"
 )
@@ -21,6 +22,7 @@ func NewSeqHook(host string) *SeqHook {
 
 func (hook *SeqHook) Fire(entry *logrus.Entry) error {
 	formatter := logrus.JSONFormatter{
+		TimestampFormat: time.RFC3339Nano,
 		FieldMap: logrus.FieldMap{
 			logrus.FieldKeyMsg:   "@mt",
 			logrus.FieldKeyLevel: "@l",
