@@ -1,11 +1,11 @@
-# Logrus Seq
+# Logruseq
 
-A Seq hook for [Logrus](https://github.com/Sirupsen/logrus)
+A Seq hook for [Logrus](https://github.com/Sirupsen/logrus) :walrus:
 
 ## Install
 
 ```
-go get -u github.com/nullseed/logrus-seq
+go get -u github.com/nullseed/logruseq
 ```
 
 ## Usage
@@ -14,7 +14,7 @@ go get -u github.com/nullseed/logrus-seq
 package main
 
 func main() {
-    log.AddHook(logrus_seq.NewSeqHook("http://localhost:5341"))
+    log.AddHook(logruseq.NewSeqHook("http://localhost:5341"))
 
     log.WithFields(log.Fields{
         "animal": "walrus",

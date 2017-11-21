@@ -1,4 +1,4 @@
-package logrus_seq
+package logruseq
 
 import (
 	"bytes"
