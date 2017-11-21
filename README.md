@@ -1,6 +1,6 @@
 # Logruseq
 
-A Seq hook for [Logrus](https://github.com/Sirupsen/logrus) :walrus:
+A [Seq](https://getseq.net/) hook for [Logrus](https://github.com/Sirupsen/logrus)
 
 ## Install
 
