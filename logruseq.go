@@ -10,12 +10,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// SeqHook sends logs to Seq via HTTP.
-type SeqHook struct {
-	endpoint string
-	apiKey   string
-}
-
 // SeqHookOptions collects non-default Seq hook options.
 type SeqHookOptions struct {
 	apiKey string
@@ -28,13 +22,22 @@ func OptionAPIKey(apiKey string) func(opts *SeqHookOptions) {
 	}
 }
 
-// NewSeqHook creates a Seq hook for logrus and sends log events to the host
-// specified.
+// SeqHook sends logs to Seq via HTTP.
+type SeqHook struct {
+	endpoint string
+	apiKey   string
+}
+
+// NewSeqHook creates a Seq hook for logrus which can send log events to the
+// host specified, for example:
+//     logruseq.NewSeqHook("http://localhost:5341")
+// Optionally, the hook can be used with an API key, for example:
+//     logruseq.NewSeqHook("http://localhost:5341", logruseq.OptionAPIKey("N1ncujiT5pYGD6m4CF0"))
 func NewSeqHook(host string, opts ...func(*SeqHookOptions)) *SeqHook {
 	sho := &SeqHookOptions{}
 
-	for _, op := range opts {
-		op(sho)
+	for _, opt := range opts {
+		opt(sho)
 	}
 
 	endpoint := fmt.Sprintf("%v/api/events/raw", host)
