@@ -14,12 +14,15 @@ type SeqHook struct {
 	host string
 }
 
+// NewSeqHook creates a Seq hook for logrus and sends log events to the host
+// specified.
 func NewSeqHook(host string) *SeqHook {
 	return &SeqHook{
 		host: host,
 	}
 }
 
+// Fire sends a log entry to Seq.
 func (hook *SeqHook) Fire(entry *logrus.Entry) error {
 	formatter := logrus.JSONFormatter{
 		TimestampFormat: time.RFC3339Nano,
@@ -54,6 +57,9 @@ func (hook *SeqHook) Fire(entry *logrus.Entry) error {
 	return nil
 }
 
+// Levels returns the levels for which Fire will be called for. These are Debug,
+// Info, Warn, Error and Fatal. Verbose level events (featured in Seq) and
+// Panic level events (featured in Logrus) are not handled.
 func (hook *SeqHook) Levels() []logrus.Level {
 	return []logrus.Level{
 		logrus.DebugLevel,

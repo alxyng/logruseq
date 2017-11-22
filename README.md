@@ -2,6 +2,8 @@
 
 A [Seq](https://getseq.net/) hook for [Logrus](https://github.com/Sirupsen/logrus)
 
+[![GoDoc](https://godoc.org/github.com/nullseed/logruseq?status.svg)](https://godoc.org/github.com/nullseed/logruseq)
+
 ## Install
 
 ```
