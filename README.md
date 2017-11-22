@@ -23,3 +23,10 @@ func main() {
     }).Info("A walrus appears")
 }
 ```
+
+API keys can be specified optionally with:
+
+```go
+    logrus.AddHook(logruseq.NewSeqHook("http://localhost:5341",
+                logruseq.OptionAPIKey("N1ncujiT5pYGD6m4CF0")))
+```
