@@ -56,7 +56,7 @@ func TestHookFireReturnsAnErrorOnRequestFailure(t *testing.T) {
 }
 
 func TestHookFireReturnsAnErrorWhenSeqDoesNotRespondWithStatusCreated(t *testing.T) {
-	body := "An error occured"
+	body := "An error occurred"
 	hook := NewSeqHook("http://localhost:5341")
 	transport := &fakeTransportInternalServerError{
 		body: body,
