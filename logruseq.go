@@ -10,15 +10,38 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
+// SeqHook sends logs to Seq via HTTP.
 type SeqHook struct {
-	host string
+	endpoint string
+	apiKey   string
+}
+
+// SeqHookOptions collects non-default Seq hook options.
+type SeqHookOptions struct {
+	apiKey string
+}
+
+// OptionAPIKey sets the Seq API key option.
+func OptionAPIKey(apiKey string) func(opts *SeqHookOptions) {
+	return func(opts *SeqHookOptions) {
+		opts.apiKey = apiKey
+	}
 }
 
 // NewSeqHook creates a Seq hook for logrus and sends log events to the host
 // specified.
-func NewSeqHook(host string) *SeqHook {
+func NewSeqHook(host string, opts ...func(*SeqHookOptions)) *SeqHook {
+	sho := &SeqHookOptions{}
+
+	for _, op := range opts {
+		op(sho)
+	}
+
+	endpoint := fmt.Sprintf("%v/api/events/raw", host)
+
 	return &SeqHook{
-		host: host,
+		endpoint: endpoint,
+		apiKey:   sho.apiKey,
 	}
 }
 
@@ -38,8 +61,18 @@ func (hook *SeqHook) Fire(entry *logrus.Entry) error {
 		return err
 	}
 
-	endpoint := fmt.Sprintf("%v/api/events/raw", hook.host)
-	resp, err := http.Post(endpoint, "application/vnd.serilog.clef", bytes.NewReader(data))
+	req, err := http.NewRequest("POST", hook.endpoint, bytes.NewReader(data))
+	if err != nil {
+		return err
+	}
+
+	req.Header.Set("Content-Type", "application/vnd.serilog.clef")
+
+	if hook.apiKey != "" {
+		req.Header.Add("X-Seq-ApiKey", hook.apiKey)
+	}
+
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		return err
 	}
