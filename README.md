@@ -2,7 +2,7 @@
 
 A [Seq](https://getseq.net/) hook for [Logrus](https://github.com/Sirupsen/logrus)
 
-[![GoDoc](https://godoc.org/github.com/nullseed/logruseq?status.svg)](https://godoc.org/github.com/nullseed/logruseq)
+[![Build Status](https://travis-ci.org/nullseed/logruseq.svg?branch=master)](https://travis-ci.org/nullseed/logruseq) [![GoDoc](https://godoc.org/github.com/nullseed/logruseq?status.svg)](https://godoc.org/github.com/nullseed/logruseq)
 
 ## Install
 

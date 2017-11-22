@@ -10,18 +10,6 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-// SeqHookOptions collects non-default Seq hook options.
-type SeqHookOptions struct {
-	apiKey string
-}
-
-// OptionAPIKey sets the Seq API key option.
-func OptionAPIKey(apiKey string) func(opts *SeqHookOptions) {
-	return func(opts *SeqHookOptions) {
-		opts.apiKey = apiKey
-	}
-}
-
 // SeqHook sends logs to Seq via HTTP.
 type SeqHook struct {
 	endpoint string
@@ -103,5 +91,17 @@ func (hook *SeqHook) Levels() []logrus.Level {
 		logrus.WarnLevel,
 		logrus.ErrorLevel,
 		logrus.FatalLevel,
+	}
+}
+
+// SeqHookOptions collects non-default Seq hook options.
+type SeqHookOptions struct {
+	apiKey string
+}
+
+// OptionAPIKey sets the Seq API key option.
+func OptionAPIKey(apiKey string) func(opts *SeqHookOptions) {
+	return func(opts *SeqHookOptions) {
+		opts.apiKey = apiKey
 	}
 }
