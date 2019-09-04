@@ -81,6 +81,7 @@ func (t *fakeTransportRequestSaver) RoundTrip(req *http.Request) (*http.Response
 
 	return &http.Response{
 		StatusCode: http.StatusCreated,
+		Body:       bodyReadCloser{bytes.NewBuffer([]byte{})},
 	}, nil
 }
 

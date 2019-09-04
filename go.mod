@@ -1,3 +1,5 @@
 module github.com/nullseed/logruseq
 
-require github.com/sirupsen/logrus v1.2.0
+require github.com/sirupsen/logrus v1.4.2
+
+go 1.12

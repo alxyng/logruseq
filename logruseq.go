@@ -67,10 +67,10 @@ func (hook *SeqHook) Fire(entry *logrus.Entry) error {
 	if err != nil {
 		return err
 	}
+	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusCreated {
 		data, err = ioutil.ReadAll(resp.Body)
-		defer resp.Body.Close()
 		if err != nil {
 			return err
 		}
