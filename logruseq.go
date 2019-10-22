@@ -14,15 +14,35 @@ import (
 type SeqHook struct {
 	endpoint string
 	apiKey   string
+	levels   []logrus.Level
 }
 
 // NewSeqHook creates a Seq hook for logrus which can send log events to the
 // host specified, for example:
 //     logruseq.NewSeqHook("http://localhost:5341")
 // Optionally, the hook can be used with an API key, for example:
-//     logruseq.NewSeqHook("http://localhost:5341", logruseq.OptionAPIKey("N1ncujiT5pYGD6m4CF0"))
+//     logruseq.NewSeqHook("http://localhost:5341",
+//         logruseq.OptionAPIKey("N1ncujiT5pYGD6m4CF0"))
+// Optionally, which levels to log can be specified:
+//     logruseq.NewSeqHook("http://localhost:5341",
+//         logruseq.OptionLevels([]logrus.Level{
+//             logrus.WarnLevel,
+//             logrus.ErrorLevel,
+//             logrus.FatalLevel,
+//             logrus.PanicLevel,
+//         }))
 func NewSeqHook(host string, opts ...func(*SeqHookOptions)) *SeqHook {
-	sho := &SeqHookOptions{}
+	sho := &SeqHookOptions{
+		levels: []logrus.Level{
+			logrus.TraceLevel,
+			logrus.DebugLevel,
+			logrus.InfoLevel,
+			logrus.WarnLevel,
+			logrus.ErrorLevel,
+			logrus.FatalLevel,
+			logrus.PanicLevel,
+		},
+	}
 
 	for _, opt := range opts {
 		opt(sho)
@@ -33,6 +53,7 @@ func NewSeqHook(host string, opts ...func(*SeqHookOptions)) *SeqHook {
 	return &SeqHook{
 		endpoint: endpoint,
 		apiKey:   sho.apiKey,
+		levels:   sho.levels,
 	}
 }
 
@@ -83,25 +104,25 @@ func (hook *SeqHook) Fire(entry *logrus.Entry) error {
 
 // Levels returns the levels for which Fire will be called.
 func (hook *SeqHook) Levels() []logrus.Level {
-	return []logrus.Level{
-		logrus.TraceLevel,
-		logrus.DebugLevel,
-		logrus.InfoLevel,
-		logrus.WarnLevel,
-		logrus.ErrorLevel,
-		logrus.FatalLevel,
-		logrus.PanicLevel,
-	}
+	return hook.levels
 }
 
 // SeqHookOptions collects non-default Seq hook options.
 type SeqHookOptions struct {
 	apiKey string
+	levels []logrus.Level
 }
 
 // OptionAPIKey sets the Seq API key option.
 func OptionAPIKey(apiKey string) func(opts *SeqHookOptions) {
 	return func(opts *SeqHookOptions) {
 		opts.apiKey = apiKey
+	}
+}
+
+// OptionLevels sets the levels for which Fire will be called.
+func OptionLevels(levels []logrus.Level) func(opts *SeqHookOptions) {
+	return func(opts *SeqHookOptions) {
+		opts.levels = levels
 	}
 }

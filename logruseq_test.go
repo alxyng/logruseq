@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"reflect"
 	"testing"
 
 	"github.com/sirupsen/logrus"
@@ -69,6 +70,41 @@ func TestHookFireReturnsAnErrorWhenSeqDoesNotRespondWithStatusCreated(t *testing
 	if actualError.Error() != expectedError.Error() {
 		t.Errorf("incorrect error, got %v, want %v",
 			actualError.Error(), expectedError.Error())
+	}
+}
+
+func TestAllLevelsAreLoggedByDefault(t *testing.T) {
+	levels := []logrus.Level{
+		logrus.TraceLevel,
+		logrus.DebugLevel,
+		logrus.InfoLevel,
+		logrus.WarnLevel,
+		logrus.ErrorLevel,
+		logrus.FatalLevel,
+		logrus.PanicLevel,
+	}
+
+	hook := NewSeqHook("http://localhost:5341")
+
+	hookLevels := hook.Levels()
+	if !reflect.DeepEqual(levels, hookLevels) {
+		t.Errorf("incorrect levels, got %v, want %v", hookLevels, levels)
+	}
+}
+
+func TestLevelsAreCorrectlySetByOptionLevels(t *testing.T) {
+	levels := []logrus.Level{
+		logrus.WarnLevel,
+		logrus.ErrorLevel,
+		logrus.FatalLevel,
+		logrus.PanicLevel,
+	}
+
+	hook := NewSeqHook("http://localhost:5341", OptionLevels(levels))
+
+	hookLevels := hook.Levels()
+	if !reflect.DeepEqual(levels, hookLevels) {
+		t.Errorf("incorrect levels, got %v, want %v", hookLevels, levels)
 	}
 }
 
